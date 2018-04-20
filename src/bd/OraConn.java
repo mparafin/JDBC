@@ -8,33 +8,34 @@ public class OraConn {
 	
 	static Connection connection = null;
 
-	public static void main(String[] args) {
+	public OraConn() {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException ex) {
 			System.out.println("Brak sterownika Oracle JDBC.");
 		}
-		System.out.println("Sterownik Oracle JDBC zosta³ zarejestrowany.");
+		System.out.println("Sterownik Oracle JDBC zostaï¿½ zarejestrowany.");
 		return;
 	}
 	
-	public static void open() {
+	public static void open(String login, String passwd) throws SQLException {
 		try {
-			connection = DriverManager.getConnection("jdbc:oracle:thin:@ora3.elka.pw.edu.pl:1521:ora3inf", "mparafin", "mparafin");
+			connection = DriverManager.getConnection("jdbc:oracle:thin:@ora3.elka.pw.edu.pl:1521:ora3inf", login, passwd);
 		} catch (SQLException ex) {
-			System.out.println("B³¹d ³¹czenia z baz¹! \nNumer b³êdu: " + ex.getErrorCode() + "\nOpis b³êdu: " + ex.getMessage());
-			return;
+			System.out.println("Bï¿½ï¿½d ï¿½ï¿½czenia z bazï¿½! \nNumer bï¿½ï¿½du: " + ex.getErrorCode() + "\nOpis bï¿½ï¿½du: " + ex.getMessage());
+			throw ex;
 		}
-		System.out.println("Po³¹czenie zosta³o otwarte.");
+		System.out.println("Poï¿½ï¿½czenie zostaï¿½o otwarte.");
 		return;
 	}
 	
-	public static void close() {
+	public static void close() throws SQLException {
 		try {
 			connection.close();
-			System.out.println("Po³¹czenie zosta³o zamkniête.");
+			System.out.println("Poï¿½ï¿½czenie zostaï¿½o zamkniï¿½te.");
 		} catch (SQLException ex) {
-			System.out.println("B³¹d zamykania po³¹czenia! \nNumer b³êdu: " + ex.getErrorCode() + "\nOpis b³êdu: " + ex.getMessage());
+			System.out.println("Bï¿½ï¿½d zamykania poï¿½ï¿½czenia! \nNumer bï¿½ï¿½du: " + ex.getErrorCode() + "\nOpis bï¿½ï¿½du: " + ex.getMessage());
+			throw ex;
 		}
 	}
 
