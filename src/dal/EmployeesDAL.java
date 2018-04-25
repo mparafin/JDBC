@@ -35,6 +35,7 @@ public class EmployeesDAL {
 			String query = "SELECT * FROM HR.EMPLOYEES "
 					+ "WHERE EMPLOYEE_ID = " + id;
 			ResultSet resultSet = statement.executeQuery(query);
+			resultSet.next();
 			emp = rs2Employee(resultSet);
 		} catch (SQLException ex) { System.out.println(ex); }
 		return emp;
@@ -64,7 +65,7 @@ public class EmployeesDAL {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 			String hireDate = dtf.format(emp.getHireDate());
 			
-			String query = "UPDATE EMPLOYEES SET "
+			String query = "UPDATE HR.EMPLOYEES SET "
 					+ "FIRST_NAME = '" + emp.getFirstName() + "', "
 					+ "LAST_NAME = '" + emp.getLastName() + "', "
 					+ "EMAIL = '" + emp.getEmail() + "', "
@@ -73,7 +74,7 @@ public class EmployeesDAL {
 					+ "JOB_ID = '" + emp.getJobId() + "', "
 					+ "SALARY = '" + emp.getSalary() + "', "
 					+ "MANAGER_ID = '" + emp.getManagerId() + "', "
-					+ "DEPARTMENT_ID = '" + emp.getDepartmentId() + "', "
+					+ "DEPARTMENT_ID = '" + emp.getDepartmentId() + "' "
 					+ "WHERE "
 					+ "EMPLOYEE_ID = " + emp.getEmployeeId();
 			int affectedRows = statement.executeUpdate(query);
@@ -82,5 +83,34 @@ public class EmployeesDAL {
 		} catch (SQLException ex) { this.ex = ex; return 0; }
 	}
 	
+	public boolean insertEmployee( Employee emp ) {
+		try (Statement statement = OraConn.getConnection().createStatement(); ){
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+			String hireDate = dtf.format(emp.getHireDate());
+			
+			String query = "INSERT INTO HR.EMPLOYEES VALUES"
+					+ "("+ emp.getEmployeeId() + ", '" + emp.getFirstName() + "', '"
+					+ emp.getLastName() + "', '"
+					+ emp.getEmail() + "', '"
+					+ emp.getPhoneNumber() + "', "
+					+ "to_date('" + hireDate + "', 'yyyyMMdd'), '"
+					+ emp.getJobId() + "', "
+					+ emp.getSalary() + ", null, "
+					+ emp.getManagerId() + ", "
+					+ emp.getDepartmentId() + ")";
+					
+			boolean success = statement.execute(query);
+			OraConn.getConnection().commit();
+			return success;
+		} catch (SQLException ex) { this.ex = ex; return false; }
+	}
 	
+	public boolean delEmployee( Employee emp ) {
+		try ( Statement statement = OraConn.getConnection().createStatement(); ){
+			String query = "DELETE FROM HR.EMPLOYEES WHERE EMPLOYEE_ID = " + emp.getEmployeeId();
+			boolean success = statement.execute(query);
+			OraConn.getConnection().commit();
+			return success;
+			} catch(SQLException ex) { this.ex = ex; return false; }
+	}
 }

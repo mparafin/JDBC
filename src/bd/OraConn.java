@@ -34,14 +34,14 @@ public class OraConn {
 			ex = exc;
 			throw exc;
 		}
-		System.out.println("Połączenie zostało otwarte.");
+		System.out.println("Połączenie z bazą ora3inf zostało otwarte.");
 		return;
 	}
 	
 	public static void close() throws SQLException {
 		try {
 			connection.close();
-			System.out.println("Połączenie zostało zamknięte.");
+			System.out.println("Połączenie z bazą ora3inf zostało zamknięte.");
 		} catch (SQLException exc) {
 			ex = exc;
 			throw exc;
