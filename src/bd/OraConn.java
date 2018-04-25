@@ -6,7 +6,16 @@ import java.sql.SQLException;
 
 public class OraConn {
 	
-	static Connection connection = null;
+	private static Connection connection = null;
+	
+	private static SQLException ex;
+	
+	public int getErrorCode() { return ex.getErrorCode(); }
+	public String getExceptionMessage() { return ex.getMessage(); }
+	
+	public static Connection getConnection() {
+		return connection;
+	}
 
 	public OraConn() {
 		try {
@@ -21,9 +30,9 @@ public class OraConn {
 	public static void open(String login, String passwd) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@ora3.elka.pw.edu.pl:1521:ora3inf", login, passwd);
-		} catch (SQLException ex) {
-			System.out.println("Błąd łączenia z bazą! \nNumer błędu: " + ex.getErrorCode() + "\nOpis błędu: " + ex.getMessage());
-			throw ex;
+		} catch (SQLException exc) {
+			ex = exc;
+			throw exc;
 		}
 		System.out.println("Połączenie zostało otwarte.");
 		return;
@@ -33,9 +42,9 @@ public class OraConn {
 		try {
 			connection.close();
 			System.out.println("Połączenie zostało zamknięte.");
-		} catch (SQLException ex) {
-			System.out.println("Błąd zamykania połączenia! \nNumer błędu: " + ex.getErrorCode() + "\nOpis błędu: " + ex.getMessage());
-			throw ex;
+		} catch (SQLException exc) {
+			ex = exc;
+			throw exc;
 		}
 	}
 
