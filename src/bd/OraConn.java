@@ -14,7 +14,7 @@ public class OraConn {
 		} catch (ClassNotFoundException ex) {
 			System.out.println("Brak sterownika Oracle JDBC.");
 		}
-		System.out.println("Sterownik Oracle JDBC zosta� zarejestrowany.");
+		System.out.println("Sterownik Oracle JDBC został zarejestrowany.");
 		return;
 	}
 	
@@ -22,19 +22,19 @@ public class OraConn {
 		try {
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@ora3.elka.pw.edu.pl:1521:ora3inf", login, passwd);
 		} catch (SQLException ex) {
-			System.out.println("B��d ��czenia z baz�! \nNumer b��du: " + ex.getErrorCode() + "\nOpis b��du: " + ex.getMessage());
+			System.out.println("Błąd łączenia z bazą! \nNumer błędu: " + ex.getErrorCode() + "\nOpis błędu: " + ex.getMessage());
 			throw ex;
 		}
-		System.out.println("Po��czenie zosta�o otwarte.");
+		System.out.println("Połączenie zostało otwarte.");
 		return;
 	}
 	
 	public static void close() throws SQLException {
 		try {
 			connection.close();
-			System.out.println("Po��czenie zosta�o zamkni�te.");
+			System.out.println("Połączenie zostało zamknięte.");
 		} catch (SQLException ex) {
-			System.out.println("B��d zamykania po��czenia! \nNumer b��du: " + ex.getErrorCode() + "\nOpis b��du: " + ex.getMessage());
+			System.out.println("Błąd zamykania połączenia! \nNumer błędu: " + ex.getErrorCode() + "\nOpis błędu: " + ex.getMessage());
 			throw ex;
 		}
 	}
