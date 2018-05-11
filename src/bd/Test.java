@@ -16,18 +16,18 @@ public class Test {
 			Vector<Employee> emps = dal.getEmployees();
 			System.out.println(emps.size());
 			
-			Employee emp = dal.getEmployeeByEmployeeId(203);
+			Employee emp = dal.getEmployeeByEmployeeId(201);
 			System.out.println(emp.getLastName());
 			
-			emp.setLastName("Smith");
+			emp.setLastName("Nowak");
 			dal.updateEmployee(emp);
-			emp = dal.getEmployeeByEmployeeId(203);
+			emp = dal.getEmployeeByEmployeeId(201);
 			System.out.println(dal.getEx());
 			
 			dal.insertEmployee(emp);
 			System.out.println(dal.getEx());
 			
-			dal.delEmployee(emp);
+			//dal.delEmployee(emp);
 			System.out.println(dal.getEx());
 			
 			OraConn.close();

@@ -20,7 +20,7 @@ public class EmployeesDAL {
 	public Vector<Employee> getEmployees() {
 		Vector<Employee> employees = new Vector<Employee>();
 		try ( Statement statement = OraConn.getConnection().createStatement(); ){
-			String query = "SELECT * FROM HR.EMPLOYEES";
+			String query = "SELECT * FROM EMPLOYEES";
 			ResultSet resultSet = statement.executeQuery(query);
 			while (resultSet.next()) {
 				employees.add(rs2Employee(resultSet));
@@ -32,7 +32,7 @@ public class EmployeesDAL {
 	public Employee getEmployeeByEmployeeId(int id) {
 		Employee emp = null;
 		try ( Statement statement = OraConn.getConnection().createStatement(); ) {
-			String query = "SELECT * FROM HR.EMPLOYEES "
+			String query = "SELECT * FROM EMPLOYEES "
 					+ "WHERE EMPLOYEE_ID = " + id;
 			ResultSet resultSet = statement.executeQuery(query);
 			resultSet.next();
@@ -65,7 +65,7 @@ public class EmployeesDAL {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 			String hireDate = dtf.format(emp.getHireDate());
 			
-			String query = "UPDATE HR.EMPLOYEES SET "
+			String query = "UPDATE EMPLOYEES SET "
 					+ "FIRST_NAME = '" + emp.getFirstName() + "', "
 					+ "LAST_NAME = '" + emp.getLastName() + "', "
 					+ "EMAIL = '" + emp.getEmail() + "', "
@@ -88,8 +88,15 @@ public class EmployeesDAL {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 			String hireDate = dtf.format(emp.getHireDate());
 			
-			String query = "INSERT INTO HR.EMPLOYEES VALUES"
-					+ "("+ emp.getEmployeeId() + ", '" + emp.getFirstName() + "', '"
+			String query = "SELECT MAX(EMPLOYEE_ID) FROM EMPLOYEES";
+			ResultSet resultSet = statement.executeQuery(query);
+			
+			resultSet.next();
+			int max_id = resultSet.getInt(1);
+			max_id++;
+			
+			String query2 = "INSERT INTO EMPLOYEES VALUES"
+					+ "("+ max_id + ", '" + emp.getFirstName() + "', '"
 					+ emp.getLastName() + "', '"
 					+ emp.getEmail() + "', '"
 					+ emp.getPhoneNumber() + "', "
@@ -99,7 +106,7 @@ public class EmployeesDAL {
 					+ emp.getManagerId() + ", "
 					+ emp.getDepartmentId() + ")";
 					
-			boolean success = statement.execute(query);
+			boolean success = statement.execute(query2);
 			OraConn.getConnection().commit();
 			return success;
 		} catch (SQLException ex) { this.ex = ex; return false; }
@@ -107,7 +114,7 @@ public class EmployeesDAL {
 	
 	public boolean delEmployee( Employee emp ) {
 		try ( Statement statement = OraConn.getConnection().createStatement(); ){
-			String query = "DELETE FROM HR.EMPLOYEES WHERE EMPLOYEE_ID = " + emp.getEmployeeId();
+			String query = "DELETE FROM EMPLOYEES WHERE EMPLOYEE_ID = " + emp.getEmployeeId();
 			boolean success = statement.execute(query);
 			OraConn.getConnection().commit();
 			return success;
